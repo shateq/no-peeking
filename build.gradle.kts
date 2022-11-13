@@ -1,25 +1,37 @@
 plugins {
     id("fabric-loom") version "0.12-SNAPSHOT"
     id("com.modrinth.minotaur") version "2.+"
-    id("maven-publish")
 }
 
-base.archivesName.set("fabric-example-mod")
-version = "1.0.0"
-group = "com.example"
-//Fabric Props
 val mcV = "1.18.2"
-val yarnV = "1.18.2+build.4"
-val loaderV = "0.14.10"
-//Deps
-val fapiV = "0.66.0+1.18.2"
+
+version = "1.0.0"
+group = "shateq.fabric"
+description = "Ban entities from rendering"
+base.archivesName.set("no-peeking-$version-mc$mcV")
+
+repositories {
+    maven("https://maven.shedaniel.me/")
+    maven("https://maven.terraformersmc.com/releases/")
+}
 
 dependencies {
+    val loaderV = "0.14.10"
+    val fapiV = "0.66.0+1.18.2"
+    val modMenuV = "3.1.0"
+    val clothV = "6.2.57"
+
     minecraft("com.mojang:minecraft:$mcV")
-    mappings("net.fabricmc:yarn:$yarnV:v2")
-    modImplementation("net.fabricmc:fabric-loader:$loaderV")
+    mappings(loom.officialMojangMappings())
+
     // Fabric API
+    modImplementation("net.fabricmc:fabric-loader:$loaderV")
     modImplementation("net.fabricmc.fabric-api:fabric-api:$fapiV")
+
+    modApi("com.terraformersmc:modmenu:$modMenuV")
+    modApi("me.shedaniel.cloth:cloth-config-fabric:$clothV") {
+        exclude("net.fabricmc.fabric-api")
+    }
 }
 
 java {
@@ -28,7 +40,7 @@ java {
 }
 
 loom {
-    mixin.defaultRefmapName.set("modid.refmap.json")
+    mixin.defaultRefmapName.set("nopeeking.refmap.json")
 }
 
 tasks {
@@ -38,6 +50,7 @@ tasks {
         }
     }
     withType<JavaCompile> {
+        // Minecraft 1.18 (1.18-pre2) upwards uses Java 17.
         options.encoding = Charsets.UTF_8.name()
         options.release.set(17)
     }
