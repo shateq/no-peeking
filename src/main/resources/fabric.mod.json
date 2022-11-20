@@ -2,21 +2,25 @@
   "schemaVersion": 1,
   "id": "nopeeking",
   "version": "${version}",
-  "name": "Example Mod",
-  "description": "This is an example description! Tell everyone what your mod is about!",
+  "name": "No Peeking",
+  "description": "Ban selected entities from rendering. No gawkers, no problem.",
   "authors": [
-    "Me!"
+    "Shateq"
   ],
   "contact": {
-    "homepage": "https://fabricmc.net/",
-    "sources": "https://github.com/FabricMC/fabric-example-mod"
+    "homepage": "https://modrinth.com/mod/no-peeking",
+    "sources": "https://github.com/shateq/no-peeking",
+    "issues": "https://github.com/shateq/no-peeking/issues"
   },
-  "license": "CC0-1.0",
-  "icon": "assets/nopeeking/icon.png",
-  "environment": "*",
+  "license": "MIT",
+  "icon": "assets/icon.png",
+  "environment": "client",
   "entrypoints": {
-    "main": [
+    "client": [
       "shateq.nopeeking.fabric.NoPeeking"
+    ],
+    "modmenu": [
+      "shateq.nopeeking.fabric.NoPeekingModMenu"
     ]
   },
   "mixins": [

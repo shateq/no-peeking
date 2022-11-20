@@ -4,10 +4,8 @@
   "package": "shateq.nopeeking.mixin",
   "compatibilityLevel": "JAVA_17",
   "refmap": "nopeeking.refmap.json",
-  "mixins": [
-  ],
   "client": [
-    "ExampleMixin"
+    "EntityRendererMixin"
   ],
   "injectors": {
     "defaultRequire": 1

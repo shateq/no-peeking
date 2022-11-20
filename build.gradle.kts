@@ -11,6 +11,7 @@ base.archivesName.set("no-peeking-$version-mc"+properties["mc"] as String)
 repositories {
     maven("https://maven.shedaniel.me/")
     maven("https://maven.terraformersmc.com/releases/")
+    maven("https://jitpack.io")
 }
 
 dependencies {
@@ -27,6 +28,8 @@ dependencies {
     modApi("me.shedaniel.cloth", "cloth-config-fabric", properties["cloth"] as String) {
         exclude("net.fabricmc.fabric-api")
     }
+
+    modRuntimeOnly("com.github.astei:lazydfu:0.1.2") //faster load times
 }
 
 java {
