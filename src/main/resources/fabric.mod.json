@@ -3,7 +3,7 @@
   "id": "nopeeking",
   "version": "${version}",
   "name": "No Peeking",
-  "description": "Ban selected entities from rendering. No gawkers, no problem.",
+  "description": "Leave off entities from rendering list.",
   "authors": [
     "Shateq"
   ],
