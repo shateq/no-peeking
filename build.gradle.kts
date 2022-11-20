@@ -3,12 +3,10 @@ plugins {
     id("com.modrinth.minotaur") version "2.+"
 }
 
-val mcV = "1.18.2"
-
 version = "1.0.0"
 group = "shateq.fabric"
 description = "Ban entities from rendering"
-base.archivesName.set("no-peeking-$version-mc$mcV")
+base.archivesName.set("no-peeking-$version-mc"+properties["mc"] as String)
 
 repositories {
     maven("https://maven.shedaniel.me/")
@@ -16,26 +14,22 @@ repositories {
 }
 
 dependencies {
-    val loaderV = "0.14.10"
-    val fapiV = "0.66.0+1.18.2"
-    val modMenuV = "3.1.0"
-    val clothV = "6.2.57"
-
-    minecraft("com.mojang:minecraft:$mcV")
+    minecraft("com.mojang", "minecraft", properties["mc"] as String)
     mappings(loom.officialMojangMappings())
 
-    // Fabric API
-    modImplementation("net.fabricmc:fabric-loader:$loaderV")
-    modImplementation("net.fabricmc.fabric-api:fabric-api:$fapiV")
+    modImplementation("net.fabricmc", "fabric-loader", properties["loader"] as String)
+    modImplementation("net.fabricmc.fabric-api", "fabric-api", properties["fapi"] as String)
 
-    modApi("com.terraformersmc:modmenu:$modMenuV")
-    modApi("me.shedaniel.cloth:cloth-config-fabric:$clothV") {
+    implementation("com.google.code.gson", "gson", properties["gson"] as String)
+    include("com.google.code.gson", "gson", properties["gson"] as String)
+
+    modApi("com.terraformersmc", "modmenu", properties["modmenu"] as String)
+    modApi("me.shedaniel.cloth", "cloth-config-fabric", properties["cloth"] as String) {
         exclude("net.fabricmc.fabric-api")
     }
 }
 
 java {
-    withSourcesJar()
     toolchain.languageVersion.set(JavaLanguageVersion.of(17))
 }
 
@@ -50,20 +44,15 @@ tasks {
         }
     }
     withType<JavaCompile> {
-        // Minecraft 1.18 (1.18-pre2) upwards uses Java 17.
         options.encoding = Charsets.UTF_8.name()
         options.release.set(17)
     }
-    // fabric.mod.json
-    processResources {
+    processResources {//fabric.mod.json
         filteringCharset = Charsets.UTF_8.name()
         filesMatching("fabric.mod.json") {
-            expand(
-                "version" to project.version
-            )
+            expand("version" to project.version)
         }
     }
-
 }
 
 modrinth {
