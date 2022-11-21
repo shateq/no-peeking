@@ -29,7 +29,7 @@ dependencies {
         exclude("net.fabricmc.fabric-api")
     }
 
-    modRuntimeOnly("com.github.astei:lazydfu:0.1.2") //faster load times
+    modRuntimeOnly("com.github.astei:lazydfu:0.1.2") //from Jitpack
 }
 
 java {

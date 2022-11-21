@@ -4,6 +4,7 @@ import com.google.gson.FieldNamingPolicy;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import net.fabricmc.loader.api.FabricLoader;
+import net.minecraft.world.entity.EntityType;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.FileReader;
@@ -12,13 +13,19 @@ import java.lang.reflect.Modifier;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
+import java.util.ArrayList;
 import java.util.List;
 
-@SuppressWarnings("unused")
 public class Rubbernecks {
     private static final Gson GSON = new GsonBuilder().setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES).setPrettyPrinting().excludeFieldsWithModifiers(Modifier.PRIVATE).create();
 
-    public final NoPeekingOptions nopeeking = new NoPeekingOptions();
+    public boolean functional = true; //Still working even if empty blacklist
+    public boolean self_visible = false; //Does LocalPlayer want to be alone
+    public boolean as_whitelist = false; //Should blacklist be considered whitelist
+    //public boolean indicator = false; //Indicator when pointing Rubbernecks
+
+    public List<EntityType<?>> blacklist = new ArrayList<>();
+
     private Path path;
 
     public static @NotNull Path configDir() {
@@ -68,19 +75,6 @@ public class Rubbernecks {
         Files.writeString(temp, GSON.toJson(this)); //.toJson(this)
 
         Files.move(temp, this.path, StandardCopyOption.ATOMIC_MOVE, StandardCopyOption.REPLACE_EXISTING);
-    }
-
-    // TODO: fix
-    public enum Entities {
-        COW()
-    }
-
-    public static class NoPeekingOptions {
-        public boolean functional = true; //Still working but empty blacklist
-        public boolean self_visible = false; //Does LocalPlayer want to be alone
-        public boolean as_whitelist = false; //Should blacklist be considered whitelist
-        public boolean entity_indicator = false; //Indicator when pointing Rubbernecks
-
-        public List<Entities> blacklist = List.of(Entities.COW);//new ArrayList<>().add(Entities.COW);
+        //Files.deleteIfExists(temp);
     }
 }
