@@ -4,14 +4,18 @@ badge modrinth side
 
 Brief description of a mod functionality
 
-Another line of description :)
+images insert
 
 ## Installation
 
 - Modrinth link
+
 - Curseforge link
 
+available on modrinth badge
+
 #### Snapshots
+
 badge of actions
 - Github releases link
 

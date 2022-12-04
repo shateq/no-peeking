@@ -1,42 +1,48 @@
 package shateq.nopeeking.fabric;
 
-import com.terraformersmc.modmenu.api.ModMenuApi;
 import net.fabricmc.api.ClientModInitializer;
-import net.fabricmc.fabric.api.client.command.v1.ClientCommandManager;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
+import net.fabricmc.fabric.api.client.command.v2.ClientCommandManager;
+import net.fabricmc.fabric.api.client.command.v2.ClientCommandRegistrationCallback;
 import net.fabricmc.loader.api.FabricLoader;
-import net.minecraft.world.entity.EntityType;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import net.minecraft.ChatFormatting;
+import net.minecraft.network.chat.Component;
 
-/**
- * EntityType! it was here all that time!
- */
-public class NoPeeking implements ClientModInitializer, ModMenuApi {
-    private static final Logger LOGGER = LoggerFactory.getLogger(NoPeeking.class);
-    public static final Rubbernecks peeking = Rubbernecks.read(Rubbernecks.configDir().resolve("rubbernecks.json"));
+@Environment(EnvType.CLIENT)
+public class NoPeeking implements ClientModInitializer {
+    public static shateq.nopeeking.fabric.NoPeekingSettings SETTINGS = shateq.nopeeking.fabric.NoPeekingSettings.createAndLoad();
 
     @Override
     public void onInitializeClient() {
         if (FabricLoader.getInstance().isDevelopmentEnvironment()) {
-            LOGGER.debug("Development Environment: Always Functional");
-            peeking.functional = true;
-        }
-        // Debug
-        peeking.self_visible = true;
-        peeking.blacklist.add(EntityType.CREEPER);
-        peeking.blacklist.add(EntityType.BLAZE);
+            SETTINGS.functional(true);
 
-        ClientCommandManager.DISPATCHER.register(
-            ClientCommandManager.literal("yesno").executes(context -> {
-                peeking.functional = !peeking.functional;
-//                try {
-//                    LOGGER.info("Config write");
-//                    peeking.write();
-//                } catch (IOException e) {
-//                    throw new RuntimeException(e);
-//                }
-                return 0;
-            })
-        );
+            ClientCommandRegistrationCallback.EVENT.register((dispatcher, registryAccess) -> {
+                dispatcher.register(
+                    ClientCommandManager.literal("what").executes(c -> {
+                            c.getSource().getPlayer().sendSystemMessage(
+                                logSettings()
+                            );
+                            return 0;
+                        }
+                    ));
+                dispatcher.register(
+                    ClientCommandManager.literal("yesno").executes(context -> {
+                        SETTINGS.functional(!SETTINGS.functional());
+                        return 0;
+                    })
+                );
+            });
+        }
+    }
+
+    private Component logSettings() {
+        return Component.literal("\nNoPeeking Settings\n").withStyle(ChatFormatting.BOLD)
+            .append("Functional: " + SETTINGS.functional() + "\n")
+            .append("Render Self: " + SETTINGS.renderSelf() + "\n")
+            .append("As Whitelist: " + SETTINGS.asWhitelist() + "\n")
+            .append("List: ")
+            .append(SETTINGS.blacklist().toString());
     }
 }

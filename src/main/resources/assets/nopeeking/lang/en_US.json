@@ -1,3 +1,10 @@
 {
-  "title.nopeeking.config": "No Peeking Configuration"
+  "text.config.nopeeking.option.functional": "Functional",
+  "text.config.nopeeking.option.functional.tooltip": "Whether the mod should filter rendering.",
+  "text.config.nopeeking.option.renderSelf": "Self Visible",
+  "text.config.nopeeking.option.renderSelf.tooltip": "Should local player be rendered even despite blocking?",
+  "text.config.nopeeking.option.asWhitelist": "Whitelist",
+  "text.config.nopeeking.option.asWhitelist.tooltip": "Do we have to treat blacklist as whitelist?",
+  "text.config.nopeeking.option.blacklist": "Blacklist",
+  "text.config.nopeeking.option.blacklist.tooltip": "List entities blocked from rendering."
 }

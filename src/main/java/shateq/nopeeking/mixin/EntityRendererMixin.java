@@ -15,29 +15,28 @@ import shateq.nopeeking.fabric.NoPeeking;
 @Mixin(EntityRenderer.class)
 public class EntityRendererMixin<T extends Entity> {
 
-    // TODO: problem, does not include optimization
+    // TODO not cir return, but allow to check if should (hell you know)
     @Inject(method = "shouldRender", at = @At("HEAD"), cancellable = true)
     private void shouldRender(@NotNull T entity, Frustum frustum, double d, double e, double f, CallbackInfoReturnable<Boolean> cir) {
-        if (!NoPeeking.peeking.functional) {
-            return;
-        }
+        // TODO: problem, does not include optimization
+        if (!NoPeeking.SETTINGS.functional()) return;
+
         EntityType<?> type = entity.getType();
         boolean forPlayer = type == EntityType.PLAYER;
 
-        // Render LocalPlayer when self_visible even if blacklisted
-        if (NoPeeking.peeking.self_visible && type == EntityType.PLAYER) {
+        // Render LocalPlayer when renderSElf even if entity blacklisted
+        if (NoPeeking.SETTINGS.renderSelf() && type == EntityType.PLAYER) {
             if (Minecraft.getInstance().player != null) {
                 var matches = Minecraft.getInstance().player.getUUID().equals(entity.getUUID());
 
                 cir.setReturnValue(matches);
-                return;
             }
         }
 
-        var contains = NoPeeking.peeking.blacklist.contains(type); //not
-        cir.setReturnValue(!contains);
-
-        var whitelist = contains && NoPeeking.peeking.as_whitelist; //not
-        cir.setReturnValue(whitelist);
+//        var contains = NoPeeking.peeking.blacklist.contains(type); //not
+//        cir.setReturnValue(!contains);
+//
+//        var whitelist = contains && NoPeeking.peeking.as_whitelist; //not
+//        cir.setReturnValue(whitelist);
     }
 }
